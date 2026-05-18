@@ -29,8 +29,8 @@
 독립적으로 가정합니다. 그러나 실제로는 인접 원자가 **electromagnetic
 coupling [일렉트로마그네틱 커플링]** 을 통해 위상 응답을 왜곡합니다.
 
-이 왜곡을 **정량적 법칙 (quantitative law [퀀티테이티브 로]) 으로 답하는
-것** 이 본 프로젝트의 목표입니다.
+이 왜곡을 **정량적 법칙 (quantitative law [퀀티테이티브 로])** 으로
+답하는 것이 본 프로젝트의 목표입니다.
 
 ---
 
@@ -39,28 +39,29 @@ coupling [일렉트로마그네틱 커플링]** 을 통해 위상 응답을 왜�
 방법론은 **CDA [씨디에이] scalar [스칼라] TM [티엠] 모델** 입니다.
 
 각 메타 원자를 분극률 α [알파] 를 가진 point dipole [포인트 다이폴]
-로 근사하고, self-consistent [셀프 컨시스턴트] 식:
+로 근사하고, 다음 self-consistent [셀프 컨시스턴트] 식을 풀어 결합 응답을
+계산합니다.
 
 > $p_i = \alpha_i \, E_{\mathrm{loc},i}, \quad E_{\mathrm{loc},i} = E_{\mathrm{inc},i} + \sum_{j \ne i} G(r_{ij}) \, p_j$
->
-> 즉, **쌍극자 모멘트 p_i [피 아이] = 분극률 곱하기 국소 전기장 E_loc
-> [이 록]**. 국소 전기장은 입사파 E_inc [이 인크] 에 다른 모든 원자가
-> 산란한 필드 합이 더해진 것.
 
-이를 N×N [엔 바이 엔] 선형 시스템 **A·p = E_inc** 로 환원합니다.
-Green [그린] 함수는 2D scalar Hankel [한켈] 함수:
+쌍극자 모멘트 p_i [피 아이] 는 분극률 α_i [알파 아이] 와 국소 전기장
+E_loc [이 록] 의 곱으로 정의됩니다. 국소 전기장은 입사파 E_inc [이 인크]
+에, 다른 모든 원자가 산란한 필드의 합을 더한 값입니다.
+
+이 식은 **N×N [엔 바이 엔] 선형 시스템 A·p = E_inc** 로 환원되며, Green
+[그린] 함수는 다음 2D scalar Hankel [한켈] 함수로 주어집니다.
 
 > $G(r) = (i/4) H_0^{(1)}(k_0 r)$
->
-> i 오버 4 [아이 오버 포] 곱하기 H_0^(1) [한켈 영차 제1종] 의 k_0 r
-> [케이 영 알] 값.
 
-분극률은 Lorentzian [로렌치안] — 댐핑이 있는 공진기 모델 — 을 사용했고,
-디폴트 (default [디폴트]) 파라미터는 ω₀ [오메가 영] = 2.1π [이점일 파이],
-γ [감마] = 0.4, F [에프] = 4.0 입니다.
+즉 i 오버 4 [아이 오버 포] 곱하기 0차 제1종 Hankel 함수의 값으로 표현됩니다.
 
-핵심 라이브러리 `cda.py` [씨디에이 닷 파이] 와 NumPy [넘파이] linalg
-[린알그] solve [솔브] 만으로 N = 641 까지 1초 이내 풀이가 가능합니다.
+분극률은 댐핑이 있는 공진기 모델인 Lorentzian [로렌치안] 을 사용했으며,
+디폴트 (default [디폴트]) 파라미터는 ω₀ [오메가 영] = 2.1π, γ [감마] = 0.4,
+F [에프] = 4.0 입니다.
+
+핵심 라이브러리 `cda.py` [씨디에이 닷 파이] 와 NumPy [넘파이] 의 linalg
+[린알그] solve [솔브] 함수만으로, N = 641 까지도 1초 이내에 풀이가
+가능합니다.
 
 ---
 
@@ -69,57 +70,46 @@ Green [그린] 함수는 2D scalar Hankel [한켈] 함수:
 본 분석에 앞서, **솔버 자체의 정확성** 을 10가지 독립적 물리 검증으로
 확보했습니다.
 
-테스트 항목은 다음과 같습니다:
-- 단일 쌍극자 sanity check [새너티 체크] — 해석해 (analytical solution
-  [어낼리티컬 솔루션]) 와 일치
-- 2-dipole [투 다이폴] 해석해 비교
-- Green [그린] 함수 공식 및 reciprocity [리시프로시티, 호혜성] 검증
-- 선형 시스템 residual [레지듀얼, 잔차]
-- 거울 대칭 (mirror symmetry [미러 시메트리])
-- 행렬 reciprocity A_ij = A_ji [에이 아이제이 = 에이 제이아이]
-- 1/√N [원 오버 루트 엔] 수렴
-- 파장 scaling [스케일링] 불변성
-- 소광 전력 양수성 (extinction power positivity [익스팅션 파워
-  포지티비티])
-- 비균일 솔버의 균일 극한
+검증한 항목은 다음과 같습니다. 단일 쌍극자 sanity check [새너티 체크]
+의 해석해 (analytical solution [어낼리티컬 솔루션]) 일치, 2-dipole [투
+다이폴] 해석해 비교, Green 함수 공식과 reciprocity [리시프로시티, 호혜성],
+선형 시스템 residual [레지듀얼, 잔차], 거울 대칭 (mirror symmetry [미러
+시메트리]), 행렬 reciprocity, 1/√N [원 오버 루트 엔] 수렴, 파장 scaling
+[스케일링] 불변성, 소광 전력 양수성 (extinction power positivity), 그리고
+비균일 솔버의 균일 극한 일치, 이렇게 열 가지입니다.
 
-**열 가지 모두 기계 정밀도 (machine precision [머신 프리시전]) 수준에서
-통과** — 즉 상대 오차 10^(-16) [십의 마이너스 16승] 수준. 솔버는 신뢰
-가능한 상태로 분석을 시작했습니다.
+**모든 항목이 기계 정밀도 (machine precision [머신 프리시전]) 수준** 에서
+통과했으며, 상대 오차는 약 10⁻¹⁶ [십의 마이너스 16승] 수준입니다.
+따라서 솔버는 신뢰 가능한 상태로 본 분석을 시작했습니다.
 
 ---
 
 ## Slide 4 — Direct Answer (60초) ★ 핵심 슬라이드
 
-본 프로젝트의 **핵심 결과** 입니다.
+본 프로젝트의 핵심 결과를 말씀드리겠습니다.
 
 Wood anomaly [우드 어너멀리, 격자 공명] 을 회피한 sub-wavelength [서브
-웨이브렝스] 영역, 즉 P ∈ [0.55 λ, 0.85 λ] [피 인 0.55 람다 0.85 람다]
-구간을 31개 점으로 fine sweep [파인 스윕] 했습니다.
-
-결과는 다음 power law [파워 로] 로 fit [핏] 됩니다:
+웨이브렝스] 영역, 즉 P 가 0.55 λ 에서 0.85 λ [영점오오 람다 에서 영점팔오
+람다] 인 구간을 31개 점으로 fine sweep [파인 스윕] 한 결과는, 다음
+power law [파워 로] 로 깔끔하게 fit [핏] 됩니다.
 
 > $|\Delta\varphi|(P) \approx 3.9 \cdot (\lambda/P)^{\beta}, \quad \beta = 0.90 \pm 0.10$
->
-> 평균 위상 편차 |Δφ| [델타 파이 절댓값] 은 약 3.9 곱하기 (λ/P) [람다
-> 오버 피] 의 β [베타] 제곱, β = 0.90 ± 0.10 [영점구공 플러스마이너스
-> 영점일공].
 
-R² [알 스퀘어] = 0.73, 1-σ [원 시그마] 표준 오차는 log-log [로그로그]
-회귀로 측정한 ±0.10 [플러스마이너스 영점일공] 입니다.
+평균 위상 편차 |Δφ| [델타 파이 절댓값] 은 약 3.9 곱하기 (λ/P) [람다 오버
+피] 의 β [베타] 제곱이며, β 값은 0.90 ± 0.10 으로 측정됐습니다. R² [알
+스퀘어] 는 0.73, 1-σ [원 시그마] 표준 오차 ± 0.10 은 log-log [로그로그]
+회귀에서 직접 얻은 값입니다.
 
-구체 수치:
-- P = 0.85 λ → |Δφ| = 3.80°
-- P = 0.55 λ → |Δφ| = 5.98°
-- 비율 (ratio [레이쇼]) 1.57배 — **+57 percent [퍼센트] 증가**
+구체 수치를 보면, P = 0.85 λ 에서 |Δφ| = 3.80°, P = 0.55 λ 에서 5.98°
+입니다. 즉 비율로 약 **1.57 배, 백분율로 +57 percent [퍼센트] 증가**
+합니다.
 
-지수 β ≈ 1 [베타 일 근처] 의 의미는 위상 왜곡이 **거의 1/P 비례 (one
-over P [원 오버 피] scaling [스케일링])** 로 증가한다는 것이며, 이는
-2D Hankel 격자합 Σ G(jP) [시그마 지 제이 피] 의 1/P 점근 거동에서
-직접 유래합니다.
+지수 β 가 1 에 가깝다는 것은 위상 왜곡이 거의 **1/P 비례 (one over P
+[원 오버 피] scaling [스케일링])** 로 증가한다는 것을 의미하며, 이는 2D
+Hankel 격자합 Σ G(jP) 의 1/P 점근 거동에서 직접 유래합니다.
 
-즉 **법칙은 결합 기하 (coupling geometry [커플링 지오메트리]) 가
-결정**합니다.
+즉 본 법칙은 **결합 기하 (coupling geometry [커플링 지오메트리]) 가
+결정**한다고 정리할 수 있습니다.
 
 ---
 
@@ -127,219 +117,213 @@ over P [원 오버 피] scaling [스케일링])** 로 증가한다는 것이며,
 
 다만 두 가지 미세 구조 (subtlety [서틀티]) 를 함께 보고드립니다.
 
-**첫째, β는 결합 강도 F [에프] 에 따라 변합니다.**
-- F = 0.5 → β = 1.23 (weak coupling [위크 커플링], super-linear
-  [수퍼 리니어])
-- F = 4.0 (디폴트) → β = 0.90
-- F = 8.0 → β = 0.46 (strong coupling [스트롱 커플링], saturation
-  [새튜레이션, 포화])
+**첫째, β 는 결합 강도 F 에 따라 변합니다.** F = 0.5 일 때 β = 1.23
+(weak coupling [위크 커플링], super-linear [수퍼 리니어]), F = 4.0
+디폴트 조건에서 β = 0.90, 그리고 F = 8.0 일 때 β = 0.46 (strong coupling
+[스트롱 커플링], saturation [새튜레이션, 포화]) 으로 나타납니다. 즉 약한
+결합 영역에서는 β > 1, 강한 결합 영역에서는 β < 1 이며, β ≈ 1 은 두
+영역의 transition [트랜지션] 에 해당합니다.
 
-즉 약한 결합 영역에선 β > 1, 강한 결합 영역에선 β < 1. β ≈ 1 은 두
-영역의 transition [트랜지션] 에서 나타납니다.
+**둘째, β 는 fit window [핏 윈도우] 에도 의존합니다.** P 가 [0.55, 0.85]
+인 구간에서는 β = 0.90 이지만, Wood anomaly 에 더 가까운 [0.65, 0.85]
+구간에서는 β = 1.58 로 가팔라집니다. 즉 Δφ(P) 는 단일 universal [유니버설]
+power law 가 아니라, P = λ 근방에서 가팔라지는 매끄러운 함수입니다.
 
-**둘째, β는 fit window [핏 윈도우] 에도 의존합니다.**
-- P ∈ [0.55, 0.85] → β = 0.90
-- P ∈ [0.65, 0.85] (Wood anomaly 에 더 근접) → β = 1.58
-
-즉 Δφ(P) 는 단일 universal [유니버설] power law 가 아니라, P = λ
-근방에서 가팔라지는 매끄러운 함수입니다. 따라서 보고된 β = 0.90 은
-**우리 결합 강도에서의 effective exponent [이펙티브 익스포넌트]** 이며,
-실제 메타서페이스 디자인은 β = 0.5 ~ 1.3 [영점오 에서 일점삼] 범위 어디에도
-존재할 수 있습니다.
+따라서 보고된 β = 0.90 은 **본 결합 강도에서의 effective exponent
+[이펙티브 익스포넌트]** 이며, 실제 메타서페이스 디자인은 β 가 0.5 에서
+1.3 사이 어디에도 존재할 수 있다고 정리할 수 있습니다.
 
 ---
 
 ## Slide 6 — Result A: Mean phase deviation (40초)
 
-자세한 결과 (Result A~F) 를 순차적으로 보고드립니다.
+자세한 결과들 (Result A 부터 F 까지) 을 순차적으로 보고드립니다.
 
-**Result A — uniform vs non-uniform array 비공명 평균**:
-- Uniform [유니폼] 배열: 3.27°
-- Non-uniform [논 유니폼] graded α [그레이디드 알파] 배열: 3.95°
+먼저 **Result A — uniform vs non-uniform 배열의 비공명 평균 비교**
+입니다. Uniform [유니폼] 배열은 평균 위상 편차 3.27°, graded α
+[그레이디드 알파] 를 가진 non-uniform [논 유니폼] 배열은 3.95° 로
+측정됐습니다.
 
-차이는 **+0.69°, 즉 약 21 percent [퍼센트] 증가**. 이 증가분은 격자
-자체는 동일하므로 **순수히 α-inhomogeneity [알파 비균일성] 에서만**
-기여합니다.
+차이는 **+0.69°, 백분율로 약 21 percent 증가** 입니다. 이 증가분은
+격자 자체는 동일하므로 **순수히 α 비균일성 (α-inhomogeneity [알파
+인호모지니어티])** 에서만 기여합니다.
 
-함의: 표준 isolated-atom 설계는 graded structure 에서 위상 오차를 약
-21 percent **과소평가** 합니다.
+함의는 분명합니다. 표준 isolated-atom [아이솔레이티드 아톰] 설계 방식은
+graded structure 에서 위상 오차를 약 21 percent **과소평가** 한다고
+정량적으로 말할 수 있습니다.
 
 ---
 
 ## Slide 7 — Result C + F: Symmetry + α-ordering (40초)
 
-**Result C — Mirror symmetry break [미러 시메트리 브레이크]**:
-- Uniform 배열: 좌우 평균 차 = 0°, 완벽 대칭
-- Non-uniform 배열: -0.96° → graded α 가 거울 대칭을 깬다
+**Result C — 거울 대칭 깨짐 (mirror symmetry break [미러 시메트리
+브레이크])** 입니다. Uniform 배열은 좌우 평균 차가 0° 로 완벽 대칭을
+보이지만, non-uniform 배열은 -0.96° 로 측정됐습니다. 즉 graded α 가
+거울 대칭을 깨며, 이는 실제 메타렌즈에서 위상 그래디언트가 가파른 영역의
+초점 왜곡 (focal spot distortion [포컬 스팟 디스토션]) 의 원인이 될 수
+있습니다.
 
-→ 실제 메타렌즈에서 위상 그래디언트가 가파른 영역의 초점 왜곡 (focal
-spot distortion [포컬 스팟 디스토션]) 의 원인.
+**Result F — α 순서 (ordering [오더링]) 민감도** 입니다. Ascending
+[어센딩] 순서의 평균은 5.10°, descending [디센딩] 도 mirror equivalent
+로 5.10°, random [랜덤] shuffle [셔플] 은 5.16 에서 7.57° 범위에 분포하며
+median [미디언] 은 5.49° 입니다.
 
-**Result F — α-ordering [알파 오더링] 민감도**:
-- Ascending [어센딩] 순서: 평균 5.10°
-- Descending [디센딩]: 5.10° (mirror equivalent)
-- Random [랜덤] shuffle [셔플]: 5.16 ~ 7.57°, median [미디언] 5.49°
-
-→ 무작위 배치는 부드러운 그래디언트 대비 **최대 +50 percent 추가 왜곡**.
-이웃 간 α 변화율 제한이 결합 강건성의 **무비용 디자인 규칙** 입니다.
+즉 무작위 배치는 부드러운 그래디언트 대비 **최대 50 percent 추가 왜곡**
+을 보입니다. 이웃 간 α 변화율을 제한하는 것이 결합 강건성을 위한
+**무비용 디자인 규칙** 으로 활용될 수 있습니다.
 
 ---
 
 ## Slide 8 — Result D + E: Numerical soundness (40초)
 
-수치 건전성 검증입니다.
+수치 건전성 검증 결과를 보고드립니다.
 
-**Result D — 행렬 조건수 (matrix conditioning [매트릭스 컨디셔닝])**:
-Wood anomaly P = λ 근방에서도 κ(A) [카파 에이] = 1.95. 매우 낮은 값.
-→ 격자 공명 피크는 행렬 특이성 (matrix singularity [매트릭스 싱귤래러티])
-에 의한 수치 인공물 (numerical artefact [뉴메리컬 아티팩트]) 이 **아니라**
-**실제 물리 현상**.
+**Result D — 행렬 조건수 (matrix conditioning [매트릭스 컨디셔닝])**
+입니다. Wood anomaly 인 P = λ 근방에서도 κ(A) [카파 에이] 는 1.95 로
+매우 낮은 값을 유지합니다. 따라서 격자 공명 피크는 행렬 특이성 (matrix
+singularity [매트릭스 싱귤래러티]) 에 의한 수치 인공물 (numerical artefact
+[뉴메리컬 아티팩트]) 이 **아니라, 실제 물리 현상** 임을 확인할 수 있습니다.
 
-**Result E — 에너지 bookkeeping [북키핑]**:
-- Extinction [익스팅션] power P_ext > 0 모든 P 에서
-- Absorption [업소프션] power P_abs > 0 모든 P 에서
-- Residual (P_ext - P_abs)/P_ext 가 유계 (bounded [바운디드])
+**Result E — 에너지 bookkeeping [북키핑]** 입니다. 소광 전력 P_ext 와
+흡수 전력 P_abs 가 모든 P 에서 양수로 유지되며, 잔차 (P_ext − P_abs) /
+P_ext 도 유계 (bounded [바운디드]) 범위 안에 머무릅니다. 이 잔차가
+[0, 1] 을 약간 벗어나는 부분은 **standard CDA 의 알려진 한계인 no
+radiation-reaction correction** 으로, 보고서 §7 Limitations 에 명시했습니다.
 
-이 잔차가 [0, 1] 을 약간 벗어나는 것은 **standard CDA 의 알려진 한계
-(no radiation-reaction correction [노 래디에이션 리액션 코렉션])** 로,
-보고서 §7 Limitations 에 명시했습니다.
-
-→ 격자 공명 피크가 진짜 물리임이 이중으로 확인됨.
+이로써 격자 공명 피크가 진짜 물리임이 두 측면에서 이중으로 확인됐습니다.
 
 ---
 
 ## Slide 9 — FDTD Cross-Validation (60초) ★ 외부 검증
 
-본 프로젝트의 가장 중요한 외부 검증입니다.
+본 프로젝트의 가장 중요한 외부 검증을 보고드립니다.
 
-CDA 의 정확성을 평가하기 위해 **독립적인 풀웨이브 시뮬레이션** 인
-Tidy3D [타이디 쓰리디] FDTD [에프디티디] 를 사용했습니다.
+CDA 의 정량적 정확성을 평가하기 위해, **독립적인 풀웨이브 시뮬레이션**
+인 Tidy3D [타이디 쓰리디] FDTD [에프디티디] 를 사용했습니다.
 
-**Setup [셋업]**:
-- 11개 Lorentz [로렌치] 매질 cylinder [실린더]
-- λ = 1 μm [마이크로미터]
-- TM [티엠] polarization [폴러라이제이션], E ∥ cylinder axis (E [이]
-  성분이 cylinder 축에 평행)
-- CDA 와 정확히 같은 geometry
+Setup [셋업] 은 다음과 같습니다. Lorentz [로렌치] 매질 cylinder
+[실린더] 11개를 1D 로 배열했고, 파장 λ 는 1 μm [마이크로미터], polarization
+[폴러라이제이션] 은 cylinder 축에 평행한 TM 모드입니다. CDA 와 정확히
+같은 geometry 를 사용했고, 총 11개의 시뮬레이션 (1 calibration
+[캘리브레이션] 과 10 개의 periods) 을 약 0.3 FlexCredit [플렉스 크레딧]
+비용으로 수행했습니다.
 
-총 11개 시뮬레이션 (1 calibration [캘리브레이션] + 10 periods),
-약 0.3 FlexCredit [플렉스 크레딧] 비용.
+결과를 보면, sub-wavelength window 안에서 CDA 와 FDTD 가 **같은 곡선
+형태** 를 보이며, RMS [알엠에스] 차이는 약 2.9° 입니다. 가장 중요한
+P = λ 격자 공명 위치에서는 CDA 가 23°, FDTD 가 20° 로, **두 방법 모두
+sharp peak [샤프 피크] 를 정확히 잡아냅니다**.
 
-**결과**:
-- Sub-wavelength window 에서 **CDA 와 FDTD 가 같은 곡선 형태**
-- RMS [알엠에스] 차이 약 2.9°
-- 가장 중요한 P = λ 격자 공명: CDA 23°, FDTD 20° — 두 방법 모두
-  **sharp peak [샤프 피크]** 를 정확히 잡음
-
-→ 핵심 결과인 power law 와 격자 공명이 **독립적 full-wave [풀웨이브]
-기준** 으로 정량 확인되었습니다.
+따라서 본 프로젝트의 핵심 결과인 power law 와 격자 공명이 **독립적인
+full-wave [풀웨이브] 기준** 으로 정량 확인됐다고 말할 수 있습니다.
 
 ---
 
 ## Slide 10 — Reliability (50초)
 
-PDF [피디에프] 가이드가 요구한 reliability [릴라이어빌리티] 검증입니다.
+PDF [피디에프] 가이드가 요구한 reliability [릴라이어빌리티] 검증
+결과입니다.
 
-**R1 — Multi-seed reliability**: 80개 랜덤 α 프로파일에서 β 분포
-- Median [미디언] β = 1.09
-- 90 percent band [퍼센트 밴드] = [0.63, 1.61]
-- → 헤드라인 β = 0.90 이 분포의 중심 근처에 포함됨
+**R1 — Multi-seed reliability** 입니다. 80개의 랜덤 α 프로파일에서
+β 분포를 측정한 결과, median [미디언] β 는 1.09 였고, 90 percent band
+[퍼센트 밴드] 는 0.63 에서 1.61 까지였습니다. 헤드라인 β = 0.90 이 분포
+의 중심 근처에 포함됩니다.
 
-**R2 — Grading magnitude sensitivity**: 그래디언트 폭 w = 0 ~ 0.4 π
-변화
-- w ≤ 0.20 π 에서 β 가 1 근처로 안정
-- w ≥ 0.30 π 에서 over-grading [오버 그레이딩] 으로 β 부호 전환
+**R2 — Grading magnitude sensitivity** 입니다. 그래디언트 폭 w 를 0 부터
+0.4π 까지 변화시킨 결과, w 가 0.20π 이하일 때 β 가 1 근처로 안정적이었고,
+w 가 0.30π 이상에서는 over-grading [오버 그레이딩] 으로 β 의 부호가
+전환됩니다.
 
-**R3 — N-convergence**: 1/√N [원 오버 루트 엔] extrapolation
-[익스트래폴레이션, 외삽]
-- **N → ∞ 극한에서 |Δφ| → 6.32°** 로 수렴
+**R3 — N-convergence** 입니다. 1/√N extrapolation [익스트래폴레이션,
+외삽] 을 적용하면, **N 이 무한대로 갈 때 |Δφ| 가 약 6.32° 로 수렴**
+함을 확인할 수 있습니다.
 
-보고된 결과는 단일 실현이 아니라 **다양한 조건에서 reliable 한 통계량**.
+따라서 보고된 결과는 단일 실현이 아니라 **다양한 조건에서 reliable 한
+통계량** 임을 입증할 수 있습니다.
 
 ---
 
 ## Slide 11 — Robustness Summary (30초)
 
-네 가지 독립 검증 — array size N, grading width [그레이딩 위드], random
-α profile, FDTD external comparison — 을 한 슬라이드에 종합했습니다.
+네 가지 독립 검증 — 배열 크기 N, grading width [그레이딩 위드], random
+α profile, 그리고 FDTD external comparison — 을 한 슬라이드에 종합해
+보았습니다.
 
-핵심 결과: **β 는 0.78 ~ 1.15 [영점칠팔 에서 일점일오] 의 좁은 범위에서
-안정** 하며, FDTD agreement [어그리먼트] 도 power-law 신뢰 구간 안에
-들어옵니다.
+핵심 결과는 **β 가 0.78 에서 1.15 의 좁은 범위에서 안정** 하다는 것이며,
+FDTD agreement [어그리먼트] 도 power-law 신뢰 구간 안에 들어옵니다.
 
-즉 1/P 법칙은 단일 fit 결과가 아니라 **여러 독립 검증을 통과한 견고한
-발견** 입니다.
+따라서 1/P 법칙은 단순한 fit 결과가 아니라 **여러 독립 검증을 통과한
+견고한 발견** 이라고 정리할 수 있습니다.
 
 ---
 
 ## Slide 12 — Physics vs Numerics vs Design (40초)
 
-PDF Week 3/4 요구사항인 **관찰된 차이의 origin classification [오리진
-클래시피케이션, 원인 분류]** 입니다.
+PDF Week 3, 4 가 요구한 **관찰된 차이의 원인 분류 (origin classification
+[오리진 클래시피케이션])** 결과입니다.
 
-- **Physics [피직스]**: 1/P power law, +21 percent extra distortion,
-  Wood anomaly peaks
-- **Design [디자인]**: 거울 대칭 깨짐, α-그래디언트 효과
-- **Numerics-sound [뉴메릭스 사운드]**: κ(A) ≤ 2, P_ext > 0, P_abs > 0
-- **External validation [익스터널 밸리데이션]**: FDTD agreement
+관찰된 모든 현상을 네 가지 origin 으로 분류했습니다. **Physics [피직스]**
+에 해당하는 것은 1/P power law, +21 percent 추가 왜곡, 그리고 Wood anomaly
+피크입니다. **Design [디자인]** 에서 오는 것은 거울 대칭 깨짐과 α
+그래디언트 효과입니다. **Numerics-sound [뉴메릭스 사운드]** 항목으로는
+κ(A) 가 2 이하, P_ext 와 P_abs 가 양수라는 점이 들어가며, **External
+validation [익스터널 밸리데이션]** 으로 FDTD 일치가 포함됩니다.
 
-**결론: 관찰된 모든 현상은 실제 물리 또는 의도된 디자인에서 기인하며,
-수치적 인공물 (numerical artefact [뉴메리컬 아티팩트]) 은 없습니다.**
+결론적으로, **관찰된 모든 현상은 실제 물리 또는 의도된 디자인에서
+기인하며, 수치적 인공물은 없습니다.**
 
 ---
 
 ## Slide 13 — Limitations (25초)
 
-정직한 한계점:
+정직하게 한계점을 말씀드리겠습니다.
 
-- **Point-dipole approximation [포인트 다이폴 어프록시메이션]**:
-  다중극 (multipole [멀티폴]) 효과 미포함
-- **2D scalar geometry**: TM 모드만, 3D vector [벡터] 효과 미포함
-- **No substrate [노 서브스트레이트]**: 자유공간 Green 함수 사용,
-  기판 효과 무시
-- **유한 1D 배열**: edge effect [엣지 이펙트] 가 1/√N 으로 천천히 감쇠
-- **No radiation-reaction correction [노 래디에이션 리액션 코렉션]**:
-  분극률에 복사 반응 보정 없음 (작은 cylinder 영역에서는 허용 가능한
-  근사)
+첫째, point-dipole approximation [포인트 다이폴 어프록시메이션] 을
+사용하므로 다중극 (multipole [멀티폴]) 효과가 포함되지 않습니다. 둘째,
+2D scalar geometry 라 TM 모드만 다루며 3D vector [벡터] 효과는 반영되지
+않습니다. 셋째, 자유공간 Green 함수를 사용하므로 기판 (substrate
+[서브스트레이트]) 효과를 무시합니다. 넷째, 유한 1D 배열이라 edge effect
+[엣지 이펙트] 가 1/√N 으로 천천히 감쇠합니다. 다섯째, 분극률에
+radiation-reaction correction [래디에이션 리액션 코렉션] 이 없어 작은
+cylinder 영역에서만 허용 가능한 근사입니다.
 
-향후 작업: 3D vector CDA, 기판 Green 함수, radiation-corrected α 로의
-확장.
+향후 작업으로는 3D vector CDA, 기판 Green 함수, radiation-corrected α
+로의 확장이 남아 있습니다.
 
 ---
 
 ## Slide 14 — What I Verified Myself (25초)
 
-PDF 가이드가 가장 강조한 항목 — **직접 검증한 내용**:
+PDF 가이드가 가장 강조한 항목인 **직접 검증한 내용** 을 정리해
+드리겠습니다.
 
-- 10/10 internal physics tests [인터널 피직스 테스트] 통과
-- 10개 서로 다른 P 점에서 FDTD external cross-validation [크로스
-  밸리데이션]
-- log-log [로그로그] 회귀로 β 의 1-σ uncertainty [언서튼티] 명시적
-  계산
-- Array size N, grading width, random α, F, fit window 에 대한
-  robustness [로버스트니스]
-- 80-seed bootstrap [부트스트랩] + 1/√N extrapolation 으로 reliability
-- 모든 관찰을 physics / design / numerics 세 origin 으로 분류
-- `validate_physics.py` [밸리데이트 피직스 닷 파이] 한 번에 12개
-  자동 검증
+10/10 internal physics tests 를 통과시켰고, 10개의 서로 다른 P 점에서
+FDTD external cross-validation [크로스 밸리데이션] 을 수행했습니다.
+또한 log-log 회귀로 β 의 1-σ uncertainty [언서튼티] 를 명시적으로
+계산했고, 배열 크기 N, grading width, random α, F, fit window 에 대한
+robustness [로버스트니스] 를 모두 확인했습니다. 80-seed bootstrap
+[부트스트랩] 과 1/√N extrapolation 으로 reliability 를 정량화했으며,
+모든 관찰을 physics, design, numerics 세 origin 으로 분류했습니다.
+마지막으로 `validate_physics.py` [밸리데이트 피직스 닷 파이] 한 번
+실행으로 12가지 검증을 자동화했습니다.
 
-모든 코드, JSON [제이슨] 결과, 그림, PPT 가 GitHub [깃허브] 에 공개되어
-1분 안에 재현 가능합니다.
+모든 코드, JSON [제이슨] 결과, 그림, PPT 는 GitHub [깃허브] 에 공개되어
+1분 이내에 재현할 수 있습니다.
 
 ---
 
 ## Slide 15 — Conclusion (30초)
 
-한 줄 요약:
+한 줄 요약입니다.
 
 > $|\Delta\varphi|(P) \approx 3.9 \cdot (\lambda/P)^{0.90 \pm 0.10}$
->
-> |Δφ|(P) ≈ 3.9 곱하기 (λ/P) 의 0.90 플러스마이너스 0.10 제곱.
 
-- N = 11 ~ 81, grading width, random α 에 걸쳐 **robust**
-- Tidy3D FDTD 와 sub-wavelength 영역에서 **직접 일치**
-- 결합 강도 F 에 따라 β = 1.2 → 0.5 로 부드럽게 변화
-- Wood anomaly 는 CDA, FDTD 두 방법 모두에서 확인된 **진짜 물리**
+|Δφ|(P) 는 약 3.9 곱하기 (λ/P) 의 0.90 ± 0.10 제곱으로 표현됩니다.
+
+이 결과는 다음 네 가지 측면에서 견고합니다. N 이 11 에서 81 까지, 그리고
+grading width 와 random α 변동에 대해 **robust** 합니다. Tidy3D FDTD
+와 sub-wavelength 영역에서 **직접 일치** 합니다. 결합 강도 F 에 따라
+β 가 1.2 에서 0.5 로 부드럽게 변합니다. 그리고 Wood anomaly 는 CDA 와
+FDTD 두 방법 모두에서 확인된 **실제 물리 현상** 입니다.
 
 이상으로 발표를 마칩니다. 질문 받겠습니다. 감사합니다.
 
@@ -347,11 +331,11 @@ PDF 가이드가 가장 강조한 항목 — **직접 검증한 내용**:
 
 ## 발표 시 주의사항
 
-- 각 슬라이드의 **첫 문장**을 또렷하게 — 청중은 슬라이드를 보고 있으니
-  내용 반복이 아닌 핵심 메시지로 진입.
-- **외워둘 수치**: β = 0.90 ± 0.10 / +57 % / +21 % / 5.98°-3.80° /
-  RMS 2.9° / CDA 23°-FDTD 20° / F-sweep 1.23 → 0.46
-- Slide 4 (Direct Answer) 와 Slide 9 (FDTD) 가 **가장 길고 가장
-  중요** — 청중이 여기서 핵심을 가져갑니다.
-- Limitations 슬라이드의 다섯 항목은 적극적으로 인정 — Q&A 에서
-  교수님 질문에 "그건 한계로 명시했고 향후 작업입니다" 로 응대 가능.
+- 각 슬라이드의 **첫 문장** 을 또렷하게 — 청중은 슬라이드를 보고 있으므로
+  내용 반복이 아닌 핵심 메시지로 진입해야 합니다.
+- **외워둘 수치**: β = 0.90 ± 0.10, +57 %, +21 %, 5.98°-3.80°, RMS 2.9°,
+  CDA 23° vs FDTD 20°, F-sweep 1.23 → 0.46.
+- Slide 4 (Direct Answer) 와 Slide 9 (FDTD) 가 **가장 길고 가장 중요** —
+  청중이 여기서 핵심을 가져갑니다.
+- Limitations 슬라이드의 다섯 항목은 적극적으로 인정 — Q&A 에서 교수님
+  질문에 "그건 한계로 명시했고 향후 작업입니다." 로 응대 가능합니다.
