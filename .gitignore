@@ -1,0 +1,9 @@
+*.pdf
+__pycache__/
+*.pyc
+_eq_images/
+fdtd_results/
+
+# secrets
+.env
+.tidy3d/

@@ -1,0 +1,147 @@
+{
+  "results": [
+    {
+      "name": "v1) Solver self-consistency  (re-run 10 tests)",
+      "pass": true,
+      "detail": "10 / 10 tests passed",
+      "extras": {
+        "n_pass": 10,
+        "n_total": 10
+      }
+    },
+    {
+      "name": "v2) FDTD <-> CDA quantitative agreement (sub-lambda + Wood anomaly)",
+      "pass": true,
+      "detail": "sub-lambda RMS = 2.919 deg  (<= 5),  max |diff| = 5.464 deg  (<= 7)\nFDTD |\u0394\u03c6| at P=0.6, 1.0, 1.2  =  6.23\u00b0, 19.66\u00b0, 6.69\u00b0\nWood peak at P=\u03bb: 19.66\u00b0 > 10 and > neighbours  ->  True",
+      "extras": {
+        "rms": 2.918858406547462,
+        "max_abs": 5.46410034539174,
+        "wood_P10_deg": 19.661100960502033,
+        "wood_P06_deg": 6.2253591581030285,
+        "wood_P12_deg": 6.685684248538347
+      }
+    },
+    {
+      "name": "v3) beta consistency across Q1, Q6, R1 + multi-window range",
+      "pass": true,
+      "detail": "beta Q1 = 0.899\nbeta Q6 = 0.899 \u00b1 0.100\nbeta R1 median = 1.088,  90% band [0.631, 1.611]\nQ9 window range [0.553, 1.582]\nheadline beta 0.90 inside R1 band: True",
+      "extras": {
+        "beta_q1": 0.8993535447722568,
+        "beta_q6": 0.8993535447722568,
+        "beta_q6_sigma": 0.0997927360177389,
+        "beta_r1_median": 1.0876606983101291,
+        "p5": 0.6305954511162709,
+        "p95": 1.610612375198781,
+        "win_min": 0.5530354000175101,
+        "win_max": 1.5820598742812895
+      }
+    },
+    {
+      "name": "v4) Reliability 90% band contains headline beta = 0.9",
+      "pass": true,
+      "detail": "90 % band = [0.631, 1.611],  headline = 0.90 -> inside: True",
+      "extras": {
+        "p5": 0.6305954511162709,
+        "p95": 1.610612375198781
+      }
+    },
+    {
+      "name": "v5) JSON values match report numbers",
+      "pass": true,
+      "detail": "9 / 9 sub-checks passed\n  [OK] off-resonance uniform 3.27\u00b0: json=3.266\n  [OK] off-resonance non-uniform 3.95\u00b0: json=3.954\n  [OK] extra +21 % distortion: match phrase '+21 %'\n  [OK] non-uniform asymmetry -0.96\u00b0: json=-0.958,  report phrase found: True\n  [OK] conditioning peak ~ 1.95 (<= 2): json peak=1.951, report mentions <= 2\n  [OK] Q1 fit A=3.9, beta=0.90: json A=3.895, beta=0.899\n  [OK] P=0.55 lambda -> 5.98\u00b0: json dev(P=0.55)=5.978\n  [OK] P=0.85 lambda -> 3.80\u00b0: json dev(P=0.85)=3.802\n  [OK] FDTD RMS in report ~ Q5 value: json Q5 RMS=2.919,  report RMS=2.92",
+      "extras": {
+        "n_pass": 9,
+        "n_total": 9
+      }
+    },
+    {
+      "name": "v6) Wood anomaly peaks at P = m*lambda  (CDA)",
+      "pass": true,
+      "detail": "  m=1.0: peak_P=0.990  shift=-0.010  peak |\u0394\u03c6| = 36.77\u00b0\n  m=2.0: peak_P=2.000  shift=+0.000  peak |\u0394\u03c6| = 25.48\u00b0\n  m=3.0: peak_P=3.000  shift=+0.000  peak |\u0394\u03c6| = 20.87\u00b0",
+      "extras": {
+        "peaks": [
+          {
+            "m": 1.0,
+            "peak_P": 0.99,
+            "peak_dev_deg": 36.76644407943524,
+            "shift": -0.010000000000000009
+          },
+          {
+            "m": 2.0,
+            "peak_P": 2.0,
+            "peak_dev_deg": 25.47900701826325,
+            "shift": 0.0
+          },
+          {
+            "m": 3.0,
+            "peak_P": 3.0,
+            "peak_dev_deg": 20.868687435253314,
+            "shift": 0.0
+          }
+        ]
+      }
+    },
+    {
+      "name": "v7) Energy bookkeeping (P_ext, P_abs > 0; residual in [-0.5, 1.5])",
+      "pass": true,
+      "detail": "P_ext range = [7.456e+00, 2.301e+01]  (>0 always: True)\nP_abs range = [5.400e+00, 2.225e+01]  (>0 always: True)\nresidual (P_ext-P_abs)/P_ext  range = [-0.320, 0.492]\n(small deviation outside [0,1] is the known bare-CDA / no-RR limitation,\n acknowledged in week4_final.md \u00a77 Limitations)",
+      "extras": {
+        "Pext_min": 7.455558052511165,
+        "Pext_max": 23.013020049007284,
+        "Pabs_min": 5.40000336400021,
+        "Pabs_max": 22.247702242654103,
+        "residual_min": -0.31962665537998125,
+        "residual_max": 0.49220730202944263
+      }
+    },
+    {
+      "name": "v8) 1/sqrtN extrapolation sanity (R3)",
+      "pass": true,
+      "detail": "y_inf = 6.322\u00b0  (> 0),  slope = -1.563,  fit RMS resid = 0.036\u00b0",
+      "extras": {
+        "y_inf": 6.321778343963169,
+        "slope": -1.5628593193368898,
+        "rms_resid": 0.03598061044264956
+      }
+    },
+    {
+      "name": "v9) Lattice-sum slope vs |\u0394\u03c6| slope (Q7 reproduction)",
+      "pass": true,
+      "detail": "|\u0394\u03c6| slope vs (\u03bb/P) = 0.899  (positive => grows with 1/P)\nIm[\u03a3 G(jP)] slope = -0.836  (|magnitude| close: True)",
+      "extras": {
+        "slope_dev": 0.8993535447722568,
+        "slope_Sim": -0.835635544391423
+      }
+    },
+    {
+      "name": "v10) Extinction positivity Im(E_inc* . p) > 0  in sub-lambda window",
+      "pass": true,
+      "detail": "min P_ext = 7.581e+00  at P = 0.550 lambda,  negative count = 0 / 31",
+      "extras": {
+        "min_P_ext": 7.581246053034236,
+        "negatives": 0
+      }
+    },
+    {
+      "name": "v11) Mirror symmetry of uniform centred array",
+      "pass": true,
+      "detail": "mean \u0394\u03c6 left = -5.787e+00\u00b0,  right = -5.787e+00\u00b0,  |L \u2212 R| = 2.665e-15 deg",
+      "extras": {
+        "asym_left": -5.787457426101887,
+        "asym_right": -5.78745742610189,
+        "delta": 2.6645352591003757e-15
+      }
+    },
+    {
+      "name": "v12) PPT structural sanity (slides + embedded pictures + size)",
+      "pass": true,
+      "detail": "slides = 16 (expected 16),  slides with >= 1 picture = 10 (>= 10),  size = 13.333 x 7.500 in",
+      "extras": {
+        "n_slides": 16,
+        "slides_with_pic": 10
+      }
+    }
+  ],
+  "n_pass": 12,
+  "n_total": 12
+}

@@ -1,0 +1,50 @@
+{
+  "A_offres_mean_uniform_deg": 3.2659422890093195,
+  "A_offres_mean_nonuniform_deg": 3.9537629331366513,
+  "A_extra_distortion_deg": 0.6878206441273318,
+  "B_thresholds": [
+    {
+      "threshold_deg": 1.0,
+      "P_star_uniform": null,
+      "P_star_nonuniform": null
+    },
+    {
+      "threshold_deg": 2.0,
+      "P_star_uniform": null,
+      "P_star_nonuniform": null
+    },
+    {
+      "threshold_deg": 3.0,
+      "P_star_uniform": null,
+      "P_star_nonuniform": null
+    },
+    {
+      "threshold_deg": 5.0,
+      "P_star_uniform": 2.06,
+      "P_star_nonuniform": null
+    }
+  ],
+  "C_asymmetry_uniform_deg": 7.105427357601002e-15,
+  "C_asymmetry_nonuniform_deg": -0.9580684970667841,
+  "D_conditioning_peaks": [
+    [
+      1.0,
+      1.951019522437237
+    ],
+    [
+      2.0,
+      1.5849635835186602
+    ],
+    [
+      3.0,
+      1.4477059389650342
+    ]
+  ],
+  "F_ascending_deg": 5.102123730801294,
+  "F_descending_deg": 5.102123730801297,
+  "F_random_median_deg": 5.486079022710163,
+  "F_random_range_deg": [
+    5.162151640370552,
+    7.570175980368307
+  ]
+}
